@@ -1,29 +1,44 @@
 package br.com.lsantos.domain;
 
+import jakarta.persistence.*;
 import java.time.LocalDateTime;
 
+@Entity
+@Table(name = "tb_cliente")
 public class Cliente {
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(name = "nome", nullable = false)
     private String nome;
 
+    @Column(name = "cpf", nullable = false, unique = true)
     private Long cpf;
 
+    @Column(name = "telefone")
     private Long telefone;
 
+    @Column(name = "email")
     private String email;
 
+    @Column(name = "sexo")
     private String sexo;
 
+    @Column(name = "endereco")
     private String endereco;
 
+    @Column(name = "numero")
     private Integer numero;
 
+    @Column(name = "cidade")
     private String cidade;
 
+    @Column(name = "estado")
     private String estado;
 
+    @Column(name = "data_cadastro")
     private LocalDateTime dataCadastro;
 
     public Cliente() {
@@ -77,12 +92,12 @@ public class Cliente {
         this.sexo = sexo;
     }
 
-    public String getEndereco() {
-        return endereco;
-    }
-
     public void setEndereco(String endereco) {
         this.endereco = endereco;
+    }
+
+    public String getEndereco() {
+        return endereco;
     }
 
     public Integer getNumero() {

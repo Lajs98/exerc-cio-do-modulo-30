@@ -1,234 +1,106 @@
 package br.com.lsantos.dao;
 
 import br.com.lsantos.domain.Cliente;
+import br.com.lsantos.util.JPAUtil;
+import jakarta.persistence.EntityManager;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.util.ArrayList;
 import java.util.List;
 
 public class ClienteDAO {
 
     public void cadastrar(Cliente cliente) {
 
-        String sql = """
-                INSERT INTO tb_cliente
-                (
-                    nome,
-                    cpf,
-                    telefone,
-                    email,
-                    sexo,
-                    endereco,
-                    numero,
-                    cidade,
-                    estado
-                )
-                VALUES
-                (
-                    ?, ?, ?, ?, ?, ?, ?, ?, ?
-                )
-                """;
+        EntityManager em = JPAUtil.getEntityManager();
 
         try {
+            em.getTransaction().begin();
 
-            Connection connection =
-                    ConnectionFactory.getConnection();
+            em.persist(cliente);
 
-            PreparedStatement statement =
-                    connection.prepareStatement(sql);
-
-            statement.setString(1, cliente.getNome());
-
-            statement.setLong(2, cliente.getCpf());
-
-            statement.setLong(3, cliente.getTelefone());
-
-            statement.setString(4, cliente.getEmail());
-
-            statement.setString(5, cliente.getSexo());
-
-            statement.setString(6, cliente.getEndereco());
-
-            statement.setInt(7, cliente.getNumero());
-
-            statement.setString(8, cliente.getCidade());
-
-            statement.setString(9, cliente.getEstado());
-
-            statement.executeUpdate();
-
-            statement.close();
-
-            connection.close();
+            em.getTransaction().commit();
 
             System.out.println("Cliente cadastrado com sucesso!");
 
         } catch (Exception e) {
-
+            em.getTransaction().rollback();
             e.printStackTrace();
 
+        } finally {
+            em.close();
         }
     }
 
     public List<Cliente> buscarTodos() {
 
-        List<Cliente> clientes =
-                new ArrayList<>();
-
-        String sql =
-                "SELECT * FROM tb_cliente";
+        EntityManager em = JPAUtil.getEntityManager();
 
         try {
+            return em.createQuery("SELECT c FROM Cliente c", Cliente.class)
+                    .getResultList();
 
-            Connection connection =
-                    ConnectionFactory.getConnection();
-
-            PreparedStatement statement =
-                    connection.prepareStatement(sql);
-
-            ResultSet resultSet =
-                    statement.executeQuery();
-
-            while (resultSet.next()) {
-
-                Cliente cliente =
-                        new Cliente();
-
-                cliente.setId(
-                        resultSet.getLong("id"));
-
-                cliente.setNome(
-                        resultSet.getString("nome"));
-
-                cliente.setCpf(
-                        resultSet.getLong("cpf"));
-
-                cliente.setTelefone(
-                        resultSet.getLong("telefone"));
-
-                cliente.setEmail(
-                        resultSet.getString("email"));
-
-                cliente.setSexo(
-                        resultSet.getString("sexo"));
-
-                cliente.setEndereco(
-                        resultSet.getString("endereco"));
-
-                cliente.setNumero(
-                        resultSet.getInt("numero"));
-
-                cliente.setCidade(
-                        resultSet.getString("cidade"));
-
-                cliente.setEstado(
-                        resultSet.getString("estado"));
-
-                clientes.add(cliente);
-            }
-
-            resultSet.close();
-
-            statement.close();
-
-            connection.close();
-
-        } catch (Exception e) {
-
-            e.printStackTrace();
-
+        } finally {
+            em.close();
         }
-
-        return clientes;
     }
+
+    public Cliente buscarPorId(Long id) {
+
+        EntityManager em = JPAUtil.getEntityManager();
+
+        try {
+            return em.find(Cliente.class, id);
+
+        } finally {
+            em.close();
+        }
+    }
+
     public void atualizar(Cliente cliente) {
 
-        String sql = """
-            UPDATE tb_cliente
-            SET
-                nome = ?,
-                cpf = ?,
-                telefone = ?,
-                email = ?,
-                sexo = ?,
-                endereco = ?,
-                numero = ?,
-                cidade = ?,
-                estado = ?
-            WHERE id = ?
-            """;
+        EntityManager em = JPAUtil.getEntityManager();
 
         try {
+            em.getTransaction().begin();
 
-            Connection connection =
-                    ConnectionFactory.getConnection();
+            em.merge(cliente);
 
-            PreparedStatement statement =
-                    connection.prepareStatement(sql);
-
-            statement.setString(1, cliente.getNome());
-
-            statement.setLong(2, cliente.getCpf());
-
-            statement.setLong(3, cliente.getTelefone());
-
-            statement.setString(4, cliente.getEmail());
-
-            statement.setString(5, cliente.getSexo());
-
-            statement.setString(6, cliente.getEndereco());
-
-            statement.setInt(7, cliente.getNumero());
-
-            statement.setString(8, cliente.getCidade());
-
-            statement.setString(9, cliente.getEstado());
-
-            statement.setLong(10, cliente.getId());
-
-            statement.executeUpdate();
-
-            statement.close();
-
-            connection.close();
+            em.getTransaction().commit();
 
             System.out.println("Cliente atualizado com sucesso!");
 
         } catch (Exception e) {
-
+            em.getTransaction().rollback();
             e.printStackTrace();
 
+        } finally {
+            em.close();
         }
     }
+
     public void excluir(Long id) {
 
-        String sql =
-                "DELETE FROM tb_cliente WHERE id = ?";
+        EntityManager em = JPAUtil.getEntityManager();
 
         try {
+            em.getTransaction().begin();
 
-            Connection connection =
-                    ConnectionFactory.getConnection();
+            Cliente cliente = em.find(Cliente.class, id);
 
-            PreparedStatement statement =
-                    connection.prepareStatement(sql);
+            if (cliente != null) {
+                em.remove(cliente);
+                System.out.println("Cliente excluído com sucesso!");
+            } else {
+                System.out.println("Cliente não encontrado!");
+            }
 
-            statement.setLong(1, id);
-
-            statement.executeUpdate();
-
-            statement.close();
-
-            connection.close();
-
-            System.out.println("Cliente excluído com sucesso!");
+            em.getTransaction().commit();
 
         } catch (Exception e) {
-
+            em.getTransaction().rollback();
             e.printStackTrace();
 
+        } finally {
+            em.close();
         }
     }
 }
