@@ -7,7 +7,7 @@ public class TesteJPA {
 
     public static void main(String[] args) {
 
-        EntityManager em = JPAUtil.getEntityManager();
+        EntityManager em = JPAUtil.getEntityManagerPostgres();
 
         System.out.println("Conexão JPA realizada com sucesso!");
 

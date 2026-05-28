@@ -6,10 +6,17 @@ import jakarta.persistence.Persistence;
 
 public class JPAUtil {
 
-    private static final EntityManagerFactory emf =
-            Persistence.createEntityManagerFactory("mod30PU");
+    private static final EntityManagerFactory postgresFactory =
+            Persistence.createEntityManagerFactory("postgresPU");
 
-    public static EntityManager getEntityManager() {
-        return emf.createEntityManager();
+    private static final EntityManagerFactory mysqlFactory =
+            Persistence.createEntityManagerFactory("mysqlPU");
+
+    public static EntityManager getEntityManagerPostgres() {
+        return postgresFactory.createEntityManager();
+    }
+
+    public static EntityManager getEntityManagerMySQL() {
+        return mysqlFactory.createEntityManager();
     }
 }

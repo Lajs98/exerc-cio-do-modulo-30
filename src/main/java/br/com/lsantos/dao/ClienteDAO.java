@@ -10,7 +10,7 @@ public class ClienteDAO {
 
     public void cadastrar(Cliente cliente) {
 
-        EntityManager em = JPAUtil.getEntityManager();
+        EntityManager em = JPAUtil.getEntityManagerPostgres();
 
         try {
             em.getTransaction().begin();
@@ -32,7 +32,7 @@ public class ClienteDAO {
 
     public List<Cliente> buscarTodos() {
 
-        EntityManager em = JPAUtil.getEntityManager();
+        EntityManager em = JPAUtil.getEntityManagerPostgres();
 
         try {
             return em.createQuery("SELECT c FROM Cliente c", Cliente.class)
@@ -45,7 +45,7 @@ public class ClienteDAO {
 
     public Cliente buscarPorId(Long id) {
 
-        EntityManager em = JPAUtil.getEntityManager();
+        EntityManager em = JPAUtil.getEntityManagerPostgres();
 
         try {
             return em.find(Cliente.class, id);
@@ -57,7 +57,7 @@ public class ClienteDAO {
 
     public void atualizar(Cliente cliente) {
 
-        EntityManager em = JPAUtil.getEntityManager();
+        EntityManager em = JPAUtil.getEntityManagerPostgres();
 
         try {
             em.getTransaction().begin();
@@ -79,7 +79,7 @@ public class ClienteDAO {
 
     public void excluir(Long id) {
 
-        EntityManager em = JPAUtil.getEntityManager();
+        EntityManager em = JPAUtil.getEntityManagerPostgres();
 
         try {
             em.getTransaction().begin();

@@ -3,11 +3,9 @@
 <persistence xmlns="https://jakarta.ee/xml/ns/persistence"
              version="3.0">
 
-    <persistence-unit name="mod30PU">
-
+    <!-- PostgreSQL -->
+    <persistence-unit name="postgresPU">
         <properties>
-
-            <!-- Banco -->
             <property name="jakarta.persistence.jdbc.driver"
                       value="org.postgresql.Driver"/>
 
@@ -20,21 +18,32 @@
             <property name="jakarta.persistence.jdbc.password"
                       value="BANKAI"/>
 
-            <!-- Hibernate -->
-            <property name="hibernate.dialect"
-                      value="org.hibernate.dialect.PostgreSQLDialect"/>
-
-            <property name="hibernate.show_sql"
-                      value="true"/>
-
-            <property name="hibernate.format_sql"
-                      value="true"/>
-
-            <property name="hibernate.hbm2ddl.auto"
-                      value="update"/>
-
+            <property name="hibernate.show_sql" value="true"/>
+            <property name="hibernate.format_sql" value="true"/>
+            <property name="hibernate.hbm2ddl.auto" value="update"/>
         </properties>
+    </persistence-unit>
 
+
+    <!-- MySQL -->
+    <persistence-unit name="mysqlPU">
+        <properties>
+            <property name="jakarta.persistence.jdbc.driver"
+                      value="com.mysql.cj.jdbc.Driver"/>
+
+            <property name="jakarta.persistence.jdbc.url"
+                      value="jdbc:mysql://localhost:3306/mod30sq"/>
+
+            <property name="jakarta.persistence.jdbc.user"
+                      value="root"/>
+
+            <property name="jakarta.persistence.jdbc.password"
+                      value="BANKAI"/>
+
+            <property name="hibernate.show_sql" value="true"/>
+            <property name="hibernate.format_sql" value="true"/>
+            <property name="hibernate.hbm2ddl.auto" value="update"/>
+        </properties>
     </persistence-unit>
 
 </persistence>
